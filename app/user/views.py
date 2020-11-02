@@ -17,3 +17,12 @@ class ListUserView(generics.ListAPIView):
     """Create new queryset for all users"""
     queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
+
+
+
+
+class UserManageView(generics.RetrieveUpdateDestroyAPIView):
+    """Retrieve, Update and Destroy a single user record"""
+    queryset = get_user_model().objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'email'
