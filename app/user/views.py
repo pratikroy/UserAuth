@@ -8,6 +8,8 @@ from user.documents import UserDocument
 
 from django.contrib.auth import get_user_model
 
+from user.search import search
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
@@ -76,6 +78,5 @@ class SearchUserView(generics.ListAPIView):
     def get_queryset(self):
         q = self.request.query_params.get('q')
         if q is not None:
-            users = UserDocument.search().query('match', email=q)
-            print("Displaying users {}".format(users))
+            return search(q)
         return super().get_queryset()

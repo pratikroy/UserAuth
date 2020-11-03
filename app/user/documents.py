@@ -11,4 +11,4 @@ users.settings(number_of_shards=1, number_of_replicas=0)
 class UserDocument(Document):
     class Django:
         model = User
-        fields = ('email',)
+        fields = ['email']
