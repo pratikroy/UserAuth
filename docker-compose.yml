@@ -19,6 +19,7 @@ services:
                         - DB_PASS=supersecretpassword
                 depends_on:
                         - db
+                        - elasticsearch
 
         db:
                 image: postgres:10-alpine
@@ -26,3 +27,28 @@ services:
                         - POSTGRES_DB=app
                         - POSTGRES_USER=postgres
                         - POSTGRES_PASSWORD=supersecretpassword
+
+        elasticsearch:
+                image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
+                container_name: elasticsearch
+                restart: always
+                environment:
+                    - xpack.security.enabled=false
+                    - discovery.type=single-node
+                ulimits:
+                    memlock:
+                        soft: -1
+                        hard: -1
+                    nofile:
+                        soft: 65536
+                        hard: 65536
+                cap_add:
+                    - IPC_LOCK
+                volumes:
+                    - elasticsearch-data:/usr/share/elasticsearch/data
+                ports:
+                    - 9200:9200
+
+volumes:
+    elasticsearch-data:
+        driver: local

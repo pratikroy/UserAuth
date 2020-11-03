@@ -81,3 +81,11 @@ class UserLoginSerializer(serializers.Serializer):
 
 
 
+class SearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('email',)
+
+
+
+

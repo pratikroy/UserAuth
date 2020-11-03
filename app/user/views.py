@@ -2,6 +2,9 @@ from rest_framework import generics
 
 from user.serializers import UserSerializer
 from user.serializers import UserLoginSerializer
+from user.serializers import SearchSerializer
+
+from user.documents import UserDocument
 
 from django.contrib.auth import get_user_model
 
@@ -63,3 +66,16 @@ class UserLoginView(generics.RetrieveAPIView):
         return Response(response, status=status_code)
 
 
+
+
+class SearchUserView(generics.ListAPIView):
+    queryset = get_user_model().objects.all()
+    serializer_class = SearchSerializer
+    permission_classes = (AllowAny,)
+
+    def get_queryset(self):
+        q = self.request.query_params.get('q')
+        if q is not None:
+            users = UserDocument.search().query('match', email=q)
+            print("Displaying users {}".format(users))
+        return super().get_queryset()
